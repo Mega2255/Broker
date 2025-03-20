@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EverGreen Bank</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta2/css/all.min.css">
+    <link rel="icon" type="image/x-icon" href="images/favicon.ico.png">
+    <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+</head>
+
+<body>
+
+    <div class="header">
+        <div class="logo">
+            <span style="font-weight: bold; color: white;">Evergreen Bank</span>
+            <img src="IMG_2404.png" alt="Logo">
+        </div>
+        <div class="nav-links">
+            <a href="index.html">Home</a>
+            <a href="mailto:evergreensavings2@gmail.com">Contact Us</a>
+            <a href="#faq-container">FAQS</a>
+            <a href="register.html">Apply</a>
+        </div>
+        <div class="menu">
+            <a href="login.html">LOGIN</a>
+            <div class="hamburger" onclick="toggleSidebar()">&#8801;</div>
+        </div>
+    </div>
+
+    <div class="sidebar" id="sidebar">
+        <div class="close-btn" onclick="closeSidebar()">&times;</div>
+        <a href="index.html">Home</a>
+        <a href="mailto:evergreensavings2@gmail.com">Contact Us</a>
+        <a href="#faq-container">FAQS</a>
+        <a href="register.html">Apply</a>
+    </div>
+
+
+    <div class="services">
+        <div class="service-item"><i class="fas fa-credit-card"></i> Checking</div>
+        <div class="service-item"><i class="fas fa-car"></i> Auto Loans</div>
+        <div class="service-item"><i class="fas fa-piggy-bank"></i> Savings & CDs</div>
+        <div class="service-item"><i class="fas fa-briefcase"></i> Small Business</div>
+        <div class="service-item"><i class="fas fa-wallet"></i> Credit Cards</div>
+        <div class="service-item"><i class="fas fa-chart-line"></i> Investing</div>
+        <div class="service-item"><i class="fas fa-home"></i> Home Loans</div>
+        <div class="service-item"><i class="fas fa-graduation-cap"></i> Student Banking</div>
+    </div>
+
+    <div class="buttons">
+        <a href="#">Get the free app</a>
+        <a href="#">Schedule an appointment</a>
+    </div>
+
+    <h1>Your financial goals matter</h1>
+    <p>We can help you achieve them through Better Money Habits<sup>&reg;</sup> financial education and programs that
+        make communities stronger.</p>
+
+    <div class="slider-container">
+        <div class="slider">
+            <div class="card">
+                <img src="people-2557396_1920.jpg" alt="Father and son talking">
+                <div class="card-content">
+                    <div class="icon">&#x1F3AF;</div>
+                    <span>How to improve your money mindset and make better choices</span>
+                </div>
+            </div>
+            <div class="card">
+                <img src="clock-2696234_1920.jpg" alt="Couple discussing finances">
+                <div class="card-content">
+                    <div class="icon">&#x1F553;</div>
+                    <a href="#">Help me decide: Should I pay down debt, save or invest?</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="savings-2789153_1920.jpg" alt="People budgeting">
+                <div class="card-content">
+                    <div class="icon">&#x1F4B8;</div>
+                    <span>Effective budgeting strategies for your financial future</span>
+                </div>
+            </div>
+            <div class="card">
+                <img src="money-2696228_1920.jpg" alt="Investing tips">
+                <div class="card-content">
+                    <div class="icon">&#x1F4C8;</div>
+                    <a href="#">Investment tips to grow your wealth steadily</a>
+                </div>
+            </div>
+            <div class="card">
+                <img src="https://images.unsplash.com/photo-1522202176988-66273c2fd55f" alt="Financial planning">
+                <div class="card-content">
+                    <div class="icon">&#x1F4C5;</div>
+                    <span>Planning for retirement: What you need to know</span>
+                </div>
+            </div>
+            <div class="card">
+                <img src="credit-card-1730085_1920.jpg" alt="Debt management">
+                <div class="card-content">
+                    <div class="icon">&#x1F4B3;</div>
+                    <a href="#">Debt management strategies to reduce stress</a>
+                </div>
+            </div>
+        </div>
+        <div class="nav nav-left" onclick="moveSlider(-1)">&lt;</div>
+        <div class="nav nav-right" onclick="moveSlider(1)">&gt;</div>
+    </div>
+
+    <p>Explore more topics and build your financial know-how.</p>
+    <div class="button-container">
+        <button class="button">Visit Better Money Habits&reg;</button>
+    </div>
+
+
+    <div class="section security-section">
+        <div class="text-content">
+            <h2>🔒 Level Up Your Account Security</h2>
+            <p>Strengthen your security and gain peace of mind. Watch your security meter rise as you take proactive
+                steps against fraud in our Security Center — available in Mobile and Online Banking.</p>
+            <p>✅ Two-Factor Authentication<br>✅ Biometric Login Support<br>✅ Real-time Fraud Alerts</p>
+            <button class="btn">Check Your Level</button>
+        </div>
+        <img src="Mobile-App-Screenshot-min.png" alt="Security Mobile Interface" class="phone-image animate-image">
+    </div>
+
+    <div class="section banking-section">
+        <div class="text-content">
+            <h2>📱 Secure, Convenient Banking with Our Mobile App</h2>
+            <p>Enjoy seamless transactions with enhanced security, personalized insights, and smart notifications — all
+                at your fingertips.</p>
+            <p>💰 Track Expenses in Real-time<br>📊 Personalized Financial Reports<br>📣 Instant Payment Notifications
+            </p>
+            <button class="btn">Explore Our App</button>
+        </div>
+        <img src="unnamed.png" alt="Banking App Interface" class="phone-image animate-image">
+    </div>
+
+    <div class="section table-section">
+        <h2>📈 Investment and Insurance Products</h2>
+        <p>Our investment and insurance products provide you with enhanced financial stability:</p>
+        <div class="card-container">
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>❌ Not FDIC Insured</h3>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>Are Not Deposits</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>⚠️ Not Bank Guaranteed</h3>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>Are Not Insured by Any Federal Government Agency</p>
+                    </div>
+                </div>
+            </div>
+            <div class="flip-card">
+                <div class="flip-card-inner">
+                    <div class="flip-card-front">
+                        <h3>📉 May Lose Value</h3>
+                    </div>
+                    <div class="flip-card-back">
+                        <p>Are Not a Condition to Any Banking Service or Activity</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="feedback-section">
+        <h1>Customer Reviews</h1>
+        <div class="feedback-container">
+            <div class="feedback-slider">
+                <div class="review-card current">
+                    "Evergreen Bank has provided me with excellent service. Their customer support is top-notch, and
+                    they always prioritize my financial needs. I highly recommend Evergreen Bank."
+                    <br><br> - Jayesh Panchal (Vapi Gujarat)<br><i>FIRST Millennia Customer</i>
+                </div>
+                <div class="review-card">
+                    "Evergreen Bank offers great rewards and cashback programs that have saved me a lot of money. Their
+                    mobile banking app is also very user-friendly."
+                    <br><br> - Lokesh Kamani (Pune)<br><i>FIRST Wealth Customer</i>
+                </div>
+                <div class="review-card">
+                    "Evergreen Bank’s security features give me peace of mind. I know my accounts are safe, and I
+                    appreciate their dedication to protecting customer data."
+                    <br><br> - Jasvantsinh Rathod (Gandhinagar)<br><i>FIRST Wealth Customer</i>
+                </div>
+                <div class="review-card">
+                    "I love how Evergreen Bank offers personalized financial advice. Their team has helped me make
+                    better decisions with my savings and investments."
+                    <br><br> - Ramesh Patel (Ahmedabad)<br><i>FIRST Wealth Customer</i>
+                </div>
+            </div>
+
+            <button class="nav-btn prev-btn" onclick="changeReview(-1)">&#9664;</button>
+            <button class="nav-btn next-btn" onclick="changeReview(1)">&#9654;</button>
+
+            <div class="progress-track">
+                <div class="progress-fill"></div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="content">
+        <h1>Online Banking Service Agreement</h1>
+        <p>Welcome to Evergreen Bank's Online Banking platform. By using our services, you agree to abide by the
+            following terms and conditions to ensure security, privacy, and smooth transactions.</p>
+
+        <div class="highlight">
+            <p><strong>Key Features of Our Online Banking Service:</strong></p>
+            <ul>
+                <li>24/7 Access to Your Account</li>
+                <li>Fast and Secure Funds Transfer</li>
+                <li>Bill Payment and Subscription Services</li>
+                <li>Advanced Fraud Protection</li>
+                <li>Instant Transaction Notifications</li>
+            </ul>
+        </div>
+
+        <p>We are committed to ensuring your financial safety while offering you seamless banking services. By enrolling
+            in Evergreen Bank Online Banking, you acknowledge that:</p>
+
+        <ul>
+            <li>Your account details must be kept confidential.</li>
+            <li>All transactions are monitored to prevent unauthorized access.</li>
+            <li>Our security features include encryption, multi-factor authentication, and secure browsing protocols.
+            </li>
+        </ul>
+
+        <p>For detailed terms and conditions, please refer to our <a href="#">Full Service Agreement Document</a>.</p>
+
+        <div class="highlight">
+            <p><strong>Need Assistance?</strong> Contact our <a href="#">24/7 Customer Support</a> for any inquiries.
+            </p>
+        </div>
+    </div>
+
+
+    <div class="faq-container">
+        <div class="faq-header">Evergreen Bank FAQs</div>
+        <div class="tabs">
+            <button class="tab" data-category="rewards">Reward Points</button>
+            <button class="tab" data-category="features">Bank Features</button>
+            <button class="tab" data-category="privileges">Privileges</button>
+            <button class="tab" data-category="security">Security</button>
+            <button class="tab" data-category="loans">Loans</button>
+        </div>
+
+        <div class="faq-content">
+            <div class="faq-item rewards">
+                <div class="faq-question">What are the benefits of Evergreen Bank reward points?</div>
+                <div class="faq-answer">Evergreen Bank reward points allow you to earn points on every transaction.
+                    These points can be redeemed for shopping, travel, and cashback rewards.</div>
+            </div>
+            <div class="faq-item rewards">
+                <div class="faq-question">How can I redeem my reward points?</div>
+                <div class="faq-answer">Log in to your Evergreen Bank account, go to the 'Rewards' section, and follow
+                    the steps to redeem your points for various exciting options.</div>
+            </div>
+            <div class="faq-item rewards">
+                <div class="faq-question">Do Evergreen Bank reward points expire?</div>
+                <div class="faq-answer">No, all Evergreen Bank reward points are designed to never expire.</div>
+            </div>
+            <div class="faq-item rewards">
+                <div class="faq-question">How is the 10X reward calculated?</div>
+                <div class="faq-answer">Our 10X reward system multiplies your earned points by 10 for eligible
+                    transactions.</div>
+            </div>
+            <div class="faq-item rewards">
+                <div class="faq-question">What are never-expiring reward points?</div>
+                <div class="faq-answer">Never-expiring points ensure that your earned points remain valid indefinitely.
+                </div>
+            </div>
+
+            <div class="faq-item features" style="display: none;">
+                <div class="faq-question">What features does Evergreen Bank offer?</div>
+                <div class="faq-answer">Evergreen Bank offers features like online banking, mobile apps, and 24/7
+                    customer service.</div>
+            </div>
+
+            <div class="faq-item privileges" style="display: none;">
+                <div class="faq-question">What privileges come with a premium account?</div>
+                <div class="faq-answer">Premium accounts may get higher interest rates, lower fees, and exclusive
+                    offers.</div>
+            </div>
+
+            <div class="faq-item security" style="display: none;">
+                <div class="faq-question">What security measures does Evergreen Bank employ?</div>
+                <div class="faq-answer">Evergreen Bank uses encryption, two-factor authentication, and fraud monitoring.
+                </div>
+            </div>
+
+            <div class="faq-item loans" style="display: none;">
+                <div class="faq-question">What types of loans are available?</div>
+                <div class="faq-answer">We offer personal loans, home mortgages, and auto loans.</div>
+            </div>
+        </div>
+    </div>
+
+
+    <div class="footer">
+        <div class="footer-wave"></div>
+        <div class="footer-links">
+            <!-- <a href="#">Locations</a> -->
+            <a href="mailto:evergreensavings2@gmail.com">Contact Us</a>
+            <a href="mailto:evergreensavings2@gmail.com">Help & Support</a>
+            <a href="#">Browse with Specialist</a>
+            <a href="#">Accessible Banking</a>
+            <a href="terms.html">Privacy</a>
+            <a href="#">Security</a>
+        </div>
+        <div class="social-icons">
+            <a href="#"><i class="fab fa-facebook"></i></a>
+            <a href="#"><i class="fab fa-twitter"></i></a>
+            <a href="#"><i class="fab fa-instagram"></i></a>
+            <a href="#"><i class="fab fa-linkedin"></i></a>
+            <a href="#"><i class="fab fa-youtube"></i></a>
+        </div>
+        <div class="email-section">
+            <input type="email" placeholder="Enter your email">
+            <button>Subscribe</button>
+        </div>
+        <div class="company-email">evergreensavings2@gmail.com</div>
+        <p>&copy; 2025 Bank of Evergreen Bank. All rights reserved.</p>
+    </div>
+
+
+    <div class="floating-button">
+        <button>Apply now →</button>
+        <div class="links">
+            <a href="mailto:evergreensavings2@gmail.com">Get help</a> | <a href="register.html">View all cards</a>
+        </div>
+    </div>
+
+
+    <script src="index.js"></script>
+</body>
+
+</html>

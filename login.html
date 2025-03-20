@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ever Green Bank Login</title>
+    <link rel="stylesheet" href="login.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="main-container">
+        <div class="login-area">
+            <div class="logo">
+                <h1><span>Ever Green Bank</span></h1>
+            </div>
+            <div class="welcome-text">
+                <h2>Welcome Back</h2>
+                <p>
+                    Securely log in to access your dashboard and manage your account.
+                </p>
+            </div>
+            <form id="login-form">
+                <div class="input-box">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" required />
+                    <label for="email">Email Address</label>
+                    <div class="line"></div>
+                </div>
+                <div class="input-box">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" required />
+                    <label for="password">Password</label>
+                    <div class="line"></div>
+                </div>
+                <button type="submit" class="login-button">Login</button>
+            </form>
+            <div class="links">
+                <a href="#">Forgot Password?</a> |
+                <a href="register.html" style="text-decoration: none">Create Account</a>
+            </div>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase SDK modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import {
+            getAuth,
+            signInWithEmailAndPassword,
+        } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+  apiKey: "AIzaSyCdT99stEL8-3qiADOC-BUYv7BJS8oeHOU",
+  authDomain: "bookguru-77a14.firebaseapp.com",
+  databaseURL: "https://bookguru-77a14-default-rtdb.firebaseio.com",
+  projectId: "bookguru-77a14",
+  storageBucket: "bookguru-77a14.firebasestorage.app",
+  messagingSenderId: "496292264396",
+  appId: "1:496292264396:web:a648b8b7a42d8e3ca7c569",
+  measurementId: "G-YFXQWS9GPK"
+};
+
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+
+        // Function to display errors
+        const errorBox = document.createElement("div");
+        errorBox.id = "error-box";
+        document.querySelector(".login-area").appendChild(errorBox);
+
+        function showError(message) {
+            errorBox.textContent = message;
+            errorBox.style.color = "red";
+            setTimeout(() => (errorBox.textContent = ""), 5000);
+        }
+
+        // Function to handle login
+        async function handleLogin(e) {
+            e.preventDefault(); // Prevent form submission
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+
+            try {
+                // Sign in the user
+                const userCredential = await signInWithEmailAndPassword(auth, email, password);
+                console.log("User logged in:", userCredential.user);
+
+                // Redirect to the user dashboard
+                window.location.href = "user.html";
+            } catch (error) {
+                console.error("Login failed:", error.message);
+                showError(error.message); // Show error message
+            }
+        }
+
+        // Event listener for form submission
+        const form = document.getElementById("login-form");
+        form.addEventListener("submit", handleLogin);
+    </script>
+</body>
+
+</html>

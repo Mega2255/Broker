@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ever Green Bank|User Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="user.css" />
+</head>
+
+<body>
+    <!-- Main Container -->
+    <div class="main-container">
+        <div class="dashboard">
+            <header class="dashboard-header">
+                <button class="logout-button" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                </button>
+                <h1>Welcome, <span id="username">User</span></h1>
+                <div id="account-number" style="font-size: 1.2em; margin-top: 5px; color: #555"></div>
+                <div id="wallet-id" style="font-size: 1em; margin-top: 5px; color: #555"></div>
+            </header>
+            <div class="account-balance">
+                <h2>Account Balance</h2>
+                <p id="balance">
+                    $0.00
+                    <i class="fas fa-eye toggle-balance" onclick="toggleBalance('balance')"></i>
+                </p>
+            </div>
+            <div class="action-buttons">
+                <button onclick="openSendMoneyModal()">
+                    <i class="fas fa-paper-plane"></i> <span>Send</span>
+                </button>
+                <button onclick="receiveMoney()">
+                    <i class="fas fa-download"></i> <span>Receive</span>
+                </button>
+                <button onclick="openTransactionHistory()">
+                    <i class="fas fa-history"></i> <span>Transaction History</span>
+                </button>
+            </div>
+
+            <div class="additional-buttons">
+                <button onclick="openLoans()">
+                    <i class="fas fa-money-bill-wave"></i> Loans
+                </button>
+                <button onclick="openInvestment()">
+                    <i class="fas fa-chart-line"></i> Investment
+                </button>
+                <button onclick="openSavings()">
+                    <i class="fas fa-piggy-bank"></i> Savings
+                </button>
+                <button onclick="requestCard()">
+                    <i class="fas fa-credit-card"></i> Request Card
+                </button>
+            </div>
+
+            <!-- Send Money Modal -->
+            <div id="sendMoneyModal" class="modal">
+                <div class="modal-content">
+                    <span class="close" onclick="closeSendMoneyModal()">×</span>
+                    <h2>Send Money</h2>
+                    <div>
+                        <label for="transferAccountInput">Account Number:</label>
+                        <input type="text" id="transferAccountInput" placeholder="Enter account number" />
+                    </div>
+                    <div>
+                        <label for="transferAmountInput">Amount:</label>
+                        <input type="number" id="transferAmountInput" min="1" placeholder="Enter amount" />
+                    </div>
+                    <div>
+                        <label for="transferPinInput">Transaction PIN:</label>
+                        <input type="password" id="transferPinInput" placeholder="Enter transaction PIN" />
+                    </div>
+                    <div id="recipientContainer">
+                        <p id="recipientName"></p>
+                    </div>
+                    <button onclick="validateTransfer()">Send</button>
+                    <div id="transactionCodeField" style="display: none">
+                        <label for="transactionCodeInput">Enter Transaction Code:</label>
+                        <input type="text" id="transactionCodeInput" placeholder="Chat admin for transaction code" />
+                        <button onclick="submitTransactionCode()">Submit Code</button>
+                    </div>
+                    <div id="messageBox" class="message" style="display: none"></div>
+                </div>
+            </div>
+
+            <!-- Info Modal for Loans, Savings, and Request Card -->
+            <div id="infoModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeInfoModal()">×</span>
+                    <h2 id="modalTitle">Information</h2>
+                    <p id="modalText"></p>
+                    <button id="emailAdminButton" onclick="sendEmail()">Contact Admin</button>
+                </div>
+            </div>
+
+            <!-- Investment Info Box -->
+            <div id="investmentInfoModal" class="modal" style="display: none;">
+                <div class="modal-content">
+                    <span class="close" onclick="closeInvestmentInfoModal()">×</span>
+                    <h2>Investment Options</h2>
+                    <p>Choose between Crypto and Stock investments:</p>
+                    <button onclick="showCryptoInfo()">Crypto</button>
+                    <button onclick="showStockInfo()">Stock</button>
+                </div>
+            </div>
+
+            <!-- Transaction History Modal -->
+            <div id="transactionHistoryModal" class="transaction-history">
+                <div class="history-content">
+                    <span class="close" onclick="closeTransactionHistory()">×</span>
+                    <h2>Transaction History</h2>
+                    <div id="transactionList"></div>
+                </div>
+            </div>
+        </div>
+
+
+        <script type="module">
+            import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+            import { getAuth, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+            import { getDatabase, ref, get, update, push } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+            const firebaseConfig = {
+                apiKey: "AIzaSyCdT99stEL8-3qiADOC-BUYv7BJS8oeHOU",
+                authDomain: "bookguru-77a14.firebaseapp.com",
+                databaseURL: "https://bookguru-77a14-default-rtdb.firebaseio.com",
+                projectId: "bookguru-77a14",
+                storageBucket: "bookguru-77a14.firebasestorage.app",
+                messagingSenderId: "496292264396",
+                appId: "1:496292264396:web:a648b8b7a42d8e3ca7c569",
+                measurementId: "G-YFXQWS9GPK"
+            };
+
+            // Initialize Firebase
+            const app = initializeApp(firebaseConfig);
+            const auth = getAuth(app);
+            const database = getDatabase(app);
+
+            let currentUserId = null;
+            let currentTransactionStage = "COT"; // Initialize to first stage
+            let expectedTransactionCode = null; // To hold the expected transaction code
+            let transactionCount = 0; // Initialize transaction count
+
+            const adminEmail = "evergreensavings2@gmail.com"; // Admin email address
+
+            // Map for transaction codes based on type
+            const transactionCodesMapping = {
+                "COT": "291011",
+                "IMPS": "45781",
+                "NEFT": "110234",
+                "RTGS": "025692",
+                "SWIFT": "552781"
+            };
+
+            onAuthStateChanged(auth, async (user) => {
+                if (user) {
+                    console.log("User is logged in with UID:", user.uid);
+                    currentUserId = user.uid;
+                    await loadUserData();
+                } else {
+                    console.log("No user is currently logged in. Redirecting to login...");
+                    window.location.href = "login.html";
+                }
+            });
+
+            async function loadUserData() {
+                const userRef = ref(database, `users/${currentUserId}`);
+                const snapshot = await get(userRef);
+                if (snapshot.exists()) {
+                    const userData = snapshot.val();
+                    console.log("User data retrieved:", userData);
+                    currentTransactionStage = userData.currentTransactionStage || "COT";
+                    transactionCount = userData.transactionCount || 0;
+                    document.getElementById("username").textContent = userData.username || "User";
+                    document.getElementById("account-number").innerHTML = `<h2>Your Account Number: ${userData.accountNumber}</h2>`;
+                    const accountBalance = userData.accountBalance || 0;
+                    document.getElementById("balance").innerText = `$${accountBalance.toFixed(2)}`;
+                } else {
+                    console.log("No user data found.");
+                    document.getElementById("username").textContent = "User";
+                }
+            }
+
+            function fetchAccountHolderName(accountNumber) {
+                return get(ref(database, "users")).then((snapshot) => {
+                    const users = snapshot.val();
+                    const userKeys = Object.keys(users);
+                    for (const key of userKeys) {
+                        if (users[key].accountNumber === accountNumber) {
+                            return users[key];
+                        }
+                    }
+                    alert("Account number not found!");
+                    return null;
+                });
+            }
+
+            window.logout = function () {
+                auth.signOut().then(() => {
+                    console.log("User logged out.");
+                    window.location.href = "login.html"; // Redirect to login page after logout
+                }).catch((error) => {
+                    console.error("Error logging out:", error);
+                });
+            };
+
+            window.openSendMoneyModal = function () {
+                document.getElementById("sendMoneyModal").style.display = "block";
+                document.getElementById("recipientName").innerText = "";
+                document.getElementById("transactionCodeField").style.display = "none";
+                document.getElementById("messageBox").style.display = "none";
+                expectedTransactionCode = transactionCodesMapping[currentTransactionStage];
+            };
+
+            window.closeSendMoneyModal = function () {
+                document.getElementById("sendMoneyModal").style.display = "none";
+                resetTransferFields();
+            };
+
+            window.validateTransfer = async function () {
+                const accountNumber = document.getElementById("transferAccountInput").value;
+                const amount = parseFloat(document.getElementById("transferAmountInput").value);
+                const transactionPin = document.getElementById("transferPinInput").value.trim();
+
+                if (!accountNumber || isNaN(amount) || amount <= 0) {
+                    alert("Please enter a valid account number and amount.");
+                    return;
+                }
+
+                const userSnapshot = await get(ref(database, "users/" + currentUserId));
+                const userPin = userSnapshot.val() && userSnapshot.val().transactionPin;
+
+                if (!userPin || transactionPin !== userPin) {
+                    alert("Invalid transaction PIN!");
+                    return;
+                }
+
+                const holderData = await fetchAccountHolderName(accountNumber);
+                if (holderData) {
+                    const recipientId = holderData.userId;
+
+                    if (transactionCount >= 5) {
+                        alert("Your account has been restricted. Please visit the bank to open it back.");
+                        return;
+                    }
+
+                    alert(`Please contact customer care for your transaction code: ${currentTransactionStage}.`);
+                    document.getElementById("recipientName").innerText = holderData.username || "Recipient";
+                    document.getElementById("transactionCodeField").style.display = "block";
+                }
+            };
+
+            window.submitTransactionCode = async function () {
+                const enteredCode = document.getElementById("transactionCodeInput").value.trim();
+
+                if (enteredCode !== expectedTransactionCode) {
+                    alert("Wrong transaction code. Please chat with admin for the correct code.");
+                    return;
+                } else {
+                    await processTransfer();
+                }
+            };
+
+            async function processTransfer() {
+                const accountNumber = document.getElementById("transferAccountInput").value;
+                const amount = parseFloat(document.getElementById("transferAmountInput").value);
+
+                const holderData = await fetchAccountHolderName(accountNumber);
+                if (holderData) {
+                    const recipientId = holderData.userId;
+                    const recipientBalance = holderData.accountBalance || 0;
+                    const senderSnapshot = await get(ref(database, "users/" + currentUserId));
+                    const senderBalance = senderSnapshot.val().accountBalance || 0;
+
+                    if (senderBalance >= amount) {
+                        const transactionDate = new Date().toISOString();
+                        await Promise.all([
+                            update(ref(database, "users/" + currentUserId), {
+                                accountBalance: senderBalance - amount,
+                            }),
+                            update(ref(database, "users/" + recipientId), {
+                                accountBalance: recipientBalance + amount,
+                            }),
+                            push(ref(database, "transactions/" + currentUserId), {
+                                type: "debit",
+                                amount: amount,
+                                date: transactionDate,
+                            }),
+                            push(ref(database, "transactions/" + recipientId), {
+                                type: "credit",
+                                amount: amount,
+                                date: transactionDate,
+                            }),
+                        ]).then(async () => {
+                            alert("Transaction completed successfully!");
+                            transactionCount++;
+                            currentTransactionStage = getNextTransactionStage(currentTransactionStage);
+
+                            if (transactionCount >= 5) {
+                                alert("You have completed all transaction types. Your account will now be restricted.");
+                            }
+
+                            await update(ref(database, "users/" + currentUserId), {
+                                transactionCount: transactionCount,
+                                currentTransactionStage: currentTransactionStage,
+                            });
+                            resetTransferFields();
+                        });
+                    } else {
+                        alert("Insufficient balance.");
+                        return false;
+                    }
+                }
+            }
+
+            function resetTransferFields() {
+                document.getElementById("transferAccountInput").value = "";
+                document.getElementById("transferAmountInput").value = "";
+                document.getElementById("transferPinInput").value = "";
+                document.getElementById("recipientName").innerText = "";
+                document.getElementById("transactionCodeField").style.display = "none";
+                document.getElementById("transactionCodeInput").value = "";
+                expectedTransactionCode = null;
+            }
+
+            function getNextTransactionStage(currentStage) {
+                const stages = Object.keys(transactionCodesMapping);
+                const currentIndex = stages.indexOf(currentStage);
+                return currentIndex >= 0 && currentIndex < stages.length - 1 ? stages[currentIndex + 1] : null;
+            }
+
+            window.receiveMoney = function () {
+                alert("Receive money functionality is not implemented yet.");
+            };
+
+
+            window.openInvestment = function () {
+                document.getElementById("investmentInfoModal").style.display = "block";
+            };
+
+            window.showCryptoInfo = function () {
+                document.getElementById("modalTitle").innerText = "Crypto Investment";
+                document.getElementById("modalText").innerText = "Email our crypto, Customer Service team now to see if you're eligible for an exclusive crypto investment opportunity tailored just for you. Act fast-your gateway to digital finance awaits.";
+                openInfoModal();
+                closeInvestmentInfoModal();
+            };
+
+            window.showStockInfo = function () {
+                document.getElementById("modalTitle").innerText = "Stock Investment";
+                document.getElementById("modalText").innerText = "Email our Stock Investment Team now to see if you're eligible for an exclusive crypto investment opportunity tailored just for you. Act fast-your gateway to digital finance awaits.";
+                openInfoModal();
+                closeInvestmentInfoModal();
+            };
+
+            window.openSavings = function () {
+                document.getElementById("modalTitle").innerText = "Savings";
+                document.getElementById("modalText").innerText = "Boost your savings! Chat with our customer Service team for an amazing saving plan tailored just for you. Act now and secure your financial future today!";
+                openInfoModal();
+            };
+
+            window.openLoans = function () {
+                document.getElementById("modalTitle").innerText = "Loans";
+                document.getElementById("modalText").innerText = "Not eligible at the moment, please contact our admin for assistance.";
+                openInfoModal();
+            };
+
+            window.requestCard = function () {
+                document.getElementById("modalTitle").innerText = "Request Card";
+                document.getElementById("modalText").innerText = "Unlock your Credit and Debit card now! Chat with our Customer care for fast delivery and instant assitance with your card.";
+                openInfoModal();
+            };
+
+            function openInfoModal() {
+                document.getElementById("infoModal").style.display = "block";
+            }
+
+            window.closeInfoModal = function () {
+                document.getElementById("infoModal").style.display = "none";
+            };
+
+            function closeInvestmentInfoModal() {
+                document.getElementById("investmentInfoModal").style.display = "none";
+            }
+
+            window.viewTransactionHistory = function () {
+                alert("View transaction history functionality is not implemented yet.");
+            };
+
+            window.openTransactionHistory = async function () {
+                document.getElementById("transactionHistoryModal").style.display =
+                    "block";
+                const transactions = await getTransactionHistory(currentUserId);
+                displayTransactionHistory(transactions);
+            };
+
+            window.closeTransactionHistory = function () {
+                document.getElementById("transactionHistoryModal").style.display =
+                    "none";
+            };
+
+            async function getTransactionHistory(userId) {
+                const transactionRef = ref(database, "transactions/" + userId);
+                const snapshot = await get(transactionRef);
+                return snapshot.exists() ? snapshot.val() : [];
+            }
+
+            function displayTransactionHistory(transactions) {
+                const transactionList = document.getElementById("transactionList");
+                transactionList.innerHTML = "";
+
+                Object.keys(transactions).forEach((key) => {
+                    const transaction = transactions[key];
+                    const date = new Date(transaction.date);
+                    const formattedDate = date.toLocaleString(); // Format date and time
+                    const amount = transaction.amount;
+
+                    const transactionItem = document.createElement("div");
+                    transactionItem.className = "transaction-item";
+                    transactionItem.textContent = `${transaction.type.charAt(0).toUpperCase() + transaction.type.slice(1)
+                        }: $${amount.toFixed(2)} on ${formattedDate}`;
+                    transactionItem.className =
+                        transaction.type === "credit" ? "credit" : "debit";
+
+                    transactionList.appendChild(transactionItem);
+                });
+            }
+
+
+            // Email function to contact admin
+            window.sendEmail = function () {
+                const subject = encodeURIComponent("Inquiry");
+                const body = encodeURIComponent("I would like to inquire about..."); // Customize this text as needed
+                window.location.href = `mailto:${adminEmail}?subject=${subject}&body=${body}`;
+            };
+        </script>
+
+
+</body>
+
+</html>

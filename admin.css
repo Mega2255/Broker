@@ -1,0 +1,218 @@
+/* General Body Styles */
+body {
+  font-family: 'Roboto', Arial, sans-serif;
+  /* Modern font family */
+  background: linear-gradient(135deg, #f0f4f8, #e1e8ed);
+  /* Soft background gradient */
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
+
+/* Header Styles */
+header {
+  background-color: green;
+  /* Blue header background */
+  color: #fff;
+  /* White text */
+  padding: 20px 30px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  /* Shadow for depth */
+}
+
+h1 {
+  font-size: 2em;
+  margin: 0;
+  font-weight: 700;
+  /* Bold title */
+}
+
+/* Container for Content */
+.container {
+  max-width: 1200px;
+  margin: 40px auto;
+  padding: 40px;
+  background: #ffffff;
+  /* White background for main content */
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+  /* Deep shadow */
+}
+
+/* Button Styles */
+button {
+  cursor: pointer;
+  background-color: green;
+  /* Green button */
+  border: none;
+  color: white;
+  padding: 12px 24px;
+  border-radius: 6px;
+  transition: background-color 0.3s ease, transform 0.2s;
+  /* Smooth transitions */
+  font-weight: bold;
+  font-size: 16px;
+  /* Larger text size */
+}
+
+button:hover {
+  background-color: rgb(38, 157, 38);
+  /* Darker green on hover */
+  transform: translateY(-2px);
+  /* Lift effect on hover */
+}
+
+/* Table Styles */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+th,
+td {
+  padding: 12px 15px;
+  text-align: left;
+  border-bottom: 1px solid #e9ecef;
+  /* Light border */
+  transition: background-color 0.2s;
+  /* Smooth transition */
+}
+
+th {
+  background-color: green;
+  /* Blue background for header */
+  color: white;
+  font-weight: 600;
+  /* Bold text */
+}
+
+tr:nth-child(even) {
+  background-color: #f8f9fa;
+  /* Light gray background for even rows */
+}
+
+tr:hover {
+  background-color: #e2e6ea;
+  /* Light gray on row hover */
+}
+
+/* Card Styles */
+.card {
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin: 15px;
+  transition: transform 0.3s, box-shadow 0.3s;
+  /* Transition effects */
+}
+
+.card:hover {
+  transform: translateY(-5px);
+  /* Lift effect on hover */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  /* Shadow on hover */
+}
+
+/* Modal Styles */
+.modal {
+  display: none;
+  /* Hidden by default */
+  position: fixed;
+  z-index: 100;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  /* Dark backdrop */
+}
+
+.modal-content {
+  position: relative;
+  background-color: #fff;
+  margin: 10% auto;
+  padding: 30px;
+  border-radius: 12px;
+  width: 80%;
+  max-width: 600px;
+  /* Max width for modal */
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+/* Close Button for Modal */
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: #000;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+/* Input Styles */
+input[type='text'],
+input[type='email'],
+input[type='password'],
+input[type='number'],
+select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  margin-bottom: 20px;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  /* Smooth transition */
+}
+
+input[type='text']:focus,
+input[type='email']:focus,
+input[type='password']:focus,
+input[type='number']:focus,
+select:focus {
+  outline: none;
+  border-color: green;
+  /* Border color on focus */
+  box-shadow: rgb(26, 128, 26);
+  /* Shadow on focus */
+}
+
+/* Responsive Styles */
+@media only screen and (max-width: 768px) {
+  .container {
+    padding: 20px;
+    /* Adjust padding on smaller screens */
+  }
+
+  header {
+    flex-direction: column;
+    /* Stack header items */
+    align-items: flex-start;
+  }
+
+  h1 {
+    font-size: 1.8em;
+    /* Adjust header size */
+  }
+
+  button {
+    width: 100%;
+    /* Full width buttons on mobile */
+    margin-bottom: 10px;
+    /* Space below buttons */
+  }
+
+  .card {
+    margin: 10px 0;
+    /* Adjust margin for card on smaller screens */
+  }
+}

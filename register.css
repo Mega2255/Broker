@@ -1,0 +1,142 @@
+body {
+    font-family: 'Poppins', sans-serif;
+    background-color: #f0f4f8;
+    display: flex;
+    height: 100vh;
+    justify-content: center;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+}
+
+.registration-container {
+    background: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    padding: 40px;
+    width: 100%;
+    max-width: 400px;
+    /* Control the maximum width of the form */
+    text-align: center;
+    box-sizing: border-box;
+    /* Ensures padding is included in width */
+}
+
+.form-box .logo {
+    font-size: 28px;
+    color: green;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.form-box .logo i {
+    margin-right: 10px;
+}
+
+h2 {
+    color: #333;
+    margin-bottom: 10px;
+}
+
+p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.input-box {
+    position: relative;
+    margin-bottom: 20px;
+}
+
+.input-box input {
+    width: 100%;
+    padding: 12px 10px 12px 40px;
+    border: 2px solid green;
+    border-radius: 25px;
+    outline: none;
+    background: #f8f9fa;
+    box-sizing: border-box;
+    /* Ensures padding is included in width */
+}
+
+.input-box label {
+    position: absolute;
+    top: 50%;
+    left: 40px;
+    transform: translateY(-50%);
+    color: #777;
+    pointer-events: none;
+    transition: 0.3s;
+}
+
+.input-box input:focus~label,
+.input-box input:valid~label {
+    top: 5px;
+    left: 12px;
+    font-size: 12px;
+    color: green;
+}
+
+.input-box i {
+    position: absolute;
+    top: 50%;
+    left: 12px;
+    transform: translateY(-50%);
+    color: rgb(22, 74, 22);
+}
+
+.register-button {
+    background: green;
+    color: #fff;
+    border: none;
+    padding: 12px 0;
+    width: 100%;
+    border-radius: 25px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background 0.3s ease;
+}
+
+.register-button:hover {
+    background: #0056b3;
+}
+
+.login-prompt a {
+    color: #007bff;
+    font-weight: 600;
+}
+
+#success-box {
+    background: #d4edda;
+    border: 1px solid #c3e6cb;
+    color: green;
+    padding: 20px;
+    border-radius: 10px;
+    margin-top: 20px;
+}
+
+#password-strength {
+    display: flex;
+    align-items: center;
+    margin-bottom: 20px;
+}
+
+#strength-bar {
+    height: 8px;
+    width: 100%;
+    background-color: #ddd;
+    border-radius: 25px;
+    transition: width 0.3s ease;
+}
+
+#strength-message {
+    margin-left: 10px;
+    font-weight: bold;
+}
+
+.hidden {
+    display: none;
+    /* A utility class for hiding elements */
+}

@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Ever Green Bank Register</title>
+    <link rel="stylesheet" href="register.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="registration-container">
+        <div class="form-box">
+            <h1 class="logo">
+                <i class="fas fa-university" style="color: green"></i><span>Ever Green Bank</span>
+            </h1>
+            <h2>Create Your Account</h2>
+            <p>Join the most secure and advanced banking system today.</p>
+            <div id="error-box" class="hidden"></div>
+            <form id="registration-form">
+                <div class="input-box">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="username" required />
+                    <label for="username">Username</label>
+                    <div class="line"></div>
+                </div>
+                <div class="input-box">
+                    <i class="fas fa-user"></i>
+                    <input type="text" id="fullname" required />
+                    <label for="fullname">Full Name</label>
+                    <div class="line"></div>
+                </div>
+                <div class="input-box">
+                    <i class="fas fa-envelope"></i>
+                    <input type="email" id="email" required />
+                    <label for="email">Email Address</label>
+                    <div class="line"></div>
+                </div>
+                <div class="input-box">
+                    <i class="fas fa-phone"></i>
+                    <input type="text" id="phone" required />
+                    <label for="phone">Phone Number</label>
+                    <div class="line"></div>
+                </div>
+                <div class="input-box">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="password" required oninput="checkPasswordStrength()" />
+                    <label for="password">Password</label>
+                    <div class="line"></div>
+                </div>
+                <div id="password-strength" class="strength hidden">
+                    <div id="strength-bar"></div>
+                    <span id="strength-message"></span>
+                </div>
+                <div class="input-box">
+                    <i class="fas fa-lock"></i>
+                    <input type="password" id="confirm-password" required />
+                    <label for="confirm-password">Confirm Password</label>
+                    <div class="line"></div>
+                </div>
+                <div class="input-box">
+                    <i class="fas fa-lock"></i>
+                    <input type="text" id="transactionPin" maxlength="4" required />
+                    <label for="transactionPin">Transaction PIN (4 digits)</label>
+                    <div class="line"></div>
+                </div>
+                <button type="submit" class="register-button">
+                    <i class="fas fa-user-plus"></i> Register Now
+                </button>
+            </form>
+            <p class="login-prompt">
+                Already have an account?
+                <a href="login.html" style="text-decoration: none">Login here</a>
+            </p>
+        </div>
+    </div>
+
+    <div id="success-box" class="success-box hidden">
+        <div class="success-content">
+            <i class="fas fa-check-circle"></i>
+            <h2>Registration Successful!</h2>
+            <p>
+                You have successfully registered. Redirecting you to your dashboard...
+            </p>
+        </div>
+    </div>
+
+    <script type="module">
+        // Import Firebase SDK modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-app.js";
+        import {
+            getAuth,
+            createUserWithEmailAndPassword,
+        } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-auth.js";
+        import {
+            getDatabase,
+            ref,
+            set,
+        } from "https://www.gstatic.com/firebasejs/11.0.2/firebase-database.js";
+
+        // Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdT99stEL8-3qiADOC-BUYv7BJS8oeHOU",
+            authDomain: "bookguru-77a14.firebaseapp.com",
+            databaseURL: "https://bookguru-77a14-default-rtdb.firebaseio.com",
+            projectId: "bookguru-77a14",
+            storageBucket: "bookguru-77a14.firebasestorage.app",
+            messagingSenderId: "496292264396",
+            appId: "1:496292264396:web:a648b8b7a42d8e3ca7c569",
+            measurementId: "G-YFXQWS9GPK"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const database = getDatabase(app);
+
+        // Generate a random 12-digit account number
+        function generateAccountNumber() {
+            let accountNumber = "";
+            for (let i = 0; i < 12; i++) {
+                accountNumber += Math.floor(Math.random() * 10); // Generate a number between 0-9
+            }
+            return accountNumber;
+        }
+
+        // Generate a wallet ID
+        function generateWalletId() {
+            const chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            let walletId = "";
+            for (let i = 0; i < 10; i++) {
+                walletId += chars.charAt(Math.floor(Math.random() * chars.length)); // Generate a random character
+            }
+            return walletId;
+        }
+
+        // Check password strength
+        window.checkPasswordStrength = function () {
+            const password = document.getElementById("password").value;
+            const strengthBar = document.getElementById("strength-bar");
+            const strengthMessage = document.getElementById("strength-message");
+            const strengthContainer = document.getElementById("password-strength");
+
+            const regex = {
+                lowercase: /[a-z]/,
+                uppercase: /[A-Z]/,
+                number: /\d/,
+                special: /[!@#$%^&*(),.?":{}|<>]/,
+            };
+
+            let score = 0;
+            if (regex.lowercase.test(password)) score++;
+            if (regex.uppercase.test(password)) score++;
+            if (regex.number.test(password)) score++;
+            if (regex.special.test(password)) score++;
+
+            strengthContainer.classList.remove("hidden");
+            strengthBar.style.width = `${score * 25}%`;
+
+            if (score === 0) {
+                strengthBar.style.backgroundColor = "red";
+                strengthMessage.innerText = "Too Weak";
+            } else if (score === 1) {
+                strengthBar.style.backgroundColor = "orange";
+                strengthMessage.innerText = "Weak";
+            } else if (score === 2) {
+                strengthBar.style.backgroundColor = "yellow";
+                strengthMessage.innerText = "Moderate";
+            } else if (score === 3) {
+                strengthBar.style.backgroundColor = "cyan";
+                strengthMessage.innerText = "Strong";
+            } else {
+                strengthBar.style.backgroundColor = "green";
+                strengthMessage.innerText = "Very Strong";
+            }
+        };
+
+        // Display error messages
+        function showError(message) {
+            const errorBox = document.getElementById("error-box");
+            errorBox.innerHTML = `<i class="fas fa-exclamation-circle"></i> ${message}`;
+            errorBox.classList.remove("hidden");
+            setTimeout(() => errorBox.classList.add("hidden"), 5000);
+        }
+
+        // Handle form submission
+        async function handleFormSubmission(e) {
+            e.preventDefault();
+            const username = document.getElementById("username").value;
+            const email = document.getElementById("email").value;
+            const password = document.getElementById("password").value;
+            const confirmPassword = document.getElementById("confirm-password").value;
+            const phone = document.getElementById("phone").value;
+            const transactionPin = document.getElementById("transactionPin").value;
+
+            // Check for password match
+            if (password !== confirmPassword) {
+                showError("Passwords do not match!");
+                return;
+            }
+
+            // Validate transaction PIN
+            if (!/^\d{4}$/.test(transactionPin)) {
+                showError("Transaction PIN must be 4 digits.");
+                return;
+            }
+
+            try {
+                // Attempt to create a user
+                const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+                console.log("User registered:", userCredential.user);
+
+                // Generate account number and wallet IDs
+                const accountNumber = generateAccountNumber();
+                const walletId = generateWalletId();
+                const stockWalletId = generateWalletId();
+                const cryptoWalletId = generateWalletId();
+
+                // Store user information in Realtime Database
+                await set(ref(database, "users/" + userCredential.user.uid), {
+                    username: username,
+                    fullname: document.getElementById("fullname").value,
+                    email: email,
+                    phone: phone,
+                    accountNumber: accountNumber,
+                    transactionPin: transactionPin,
+                    walletId: walletId,
+                    stockWalletId: stockWalletId,
+                    cryptoWalletId: cryptoWalletId,
+                });
+                console.log("User data saved:", {
+                    username: username,
+                    fullname: document.getElementById("fullname").value,
+                    email: email,
+                    phone: phone,
+                    accountNumber: accountNumber,
+                    transactionPin: transactionPin,
+                    walletId: walletId,
+                    stockWalletId: stockWalletId,
+                    cryptoWalletId: cryptoWalletId,
+                });
+
+                // After successful registration, show the success box
+                showSuccessBox();
+
+            } catch (error) {
+                showError(error.message);
+            }
+        }
+
+        // Show success box and redirect
+        function showSuccessBox() {
+            const successBox = document.getElementById("success-box");
+            successBox.classList.remove("hidden");
+            setTimeout(() => {
+                window.location.href = "user.html"; // Redirect to user.html
+            }, 3000); // Redirect delay
+        }
+
+        // Add event listener to the form
+        const form = document.getElementById("registration-form");
+        form.addEventListener("submit", handleFormSubmission);
+    </script>
+</body>
+
+</html>
